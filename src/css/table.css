@@ -1,0 +1,90 @@
+
+table {
+    border-spacing: 0px;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+table thead {
+    background-color: #2e2f4b;
+}
+
+table thead tr {
+    color: #AAAAAA;
+    height: 35px;
+}
+
+table thead tr th {
+    user-select: none;
+    font-size: 13px;
+    font-weight: normal;
+    min-width: 30px;
+    text-align: right;
+    padding: 0 5px 0 5px;
+    font-weight: 600;
+}
+
+table thead tr th:nth-child(1){
+    text-align: left;
+}
+
+table tbody tr td:nth-child(1){
+    text-align: left;
+}
+
+table tbody tr {
+    height: 45px;
+    /* border-bottom: 1px solid #2e2f4b; */
+}
+
+table tbody tr td {
+    color: #E4E4E5;
+    font-size: 12px;
+    text-align: right;
+    padding: 0 5px 0 5px;
+}
+
+.thead-scroller {
+    padding-right: 8px;
+}
+
+.thead-scroller, .tbody-scroller tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    /* padding-right: 5px; */
+}
+
+.tbody-scroller {
+    display: block;
+    overflow-y: overlay;
+    overflow-x: hidden;
+    height: calc(100vh - 260px);
+}
+
+.tbody-scroller::-webkit-scrollbar, .inner-tbody-scroller::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+
+.tbody-scroller::-webkit-scrollbar-track, .inner-tbody-scroller::-webkit-scrollbar-track {
+    /* background: rgba(255, 255, 255, 0.9);  */
+    background: transparent;
+}
+
+/* Handle */
+
+.tbody-scroller::-webkit-scrollbar-thumb, .inner-tbody-scroller::-webkit-scrollbar-thumb {
+    /* background: #888; */
+    background: rgb(47, 50, 85);
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+
+.tbody-scroller::-webkit-scrollbar-thumb:hover, .inner-tbody-scroller::-webkit-scrollbar-thumb:hover {
+    /* background: #555;  */
+    background: rgb(41, 44, 78);
+}

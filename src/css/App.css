@@ -1,0 +1,57 @@
+@import "home.css";
+@import "table.css";
+@import "dialog.css";
+@import "loader.css";
+
+.App {
+    height: 100vh;
+    min-width: 700px;
+}
+
+h1, h2, h3 {
+    margin: 0px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.input-ele {
+    background-color: transparent;
+    color: white;
+    border: 1px solid #292C40;
+    padding: 5px;
+}
+
+.select-ele {
+    background-color: #181B31;
+    color: white;
+    border: 1px solid #292C40;
+    padding: 5px;
+}
+
+.input-div .addOnIcon,
+.select-ele .addOnIcon {
+    padding: 5px;
+    border: 1px solid #292C40;
+    border-right: none;
+    color: white;
+    min-width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.positiveBtn {
+    color: #FFFFFF;
+    background-color: #1EBF8A;
+    height: 30px;
+    border-radius: 3px;
+}
+
+
+.positiveBtn:hover {
+    background-color: rgb(13, 173, 120);
+}

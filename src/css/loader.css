@@ -1,0 +1,29 @@
+
+/* ==== [Loading starts] ==== */
+.loader {
+    background: rgba(0,0,0, 0.7);
+    height: 100%;
+    position: fixed;
+    opacity: 0.8;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    z-index: 10002;
+}
+
+.loader-container {
+    position: relative;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-img {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+}

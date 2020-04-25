@@ -1,0 +1,153 @@
+
+/* ==============  Home page popup dialog css starts here ============ */
+
+.app-modalDialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    text-align: center;
+}
+
+.app-modalDialog>.window {
+    background-color: #181B31;
+    border: 1px solid #202020;
+    box-shadow: 0px 0px 20px #090909;
+}
+
+.app-modalDialog>.window>.title {
+    color: #D4D4D4;
+    font-size: 16px;
+    padding: 12px 12px;
+    background-color: #20213B;
+    border: 1px solid #171717;
+}
+
+.app-modalDialog>.window>.title h4 {
+    margin: 0;
+}
+
+.app-modalDialog>.window>.content {
+    padding: 15px 45px;
+    color: #808080;
+    font-weight: 500;
+}
+
+.app-modalDialog>.window>.footer {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    border-top: 1px solid #22222c;
+}
+
+.app-modalDialog>.window>.footer button {
+    flex: 1;
+    background-color: transparent;
+    height: 70%;
+    font-size: 14px;
+}
+
+.app-modalDialog>.window>.footer .negativeBtn {
+    color: #949494;
+}
+
+.app-modalDialog>.window>.footer .negativeBtn:hover{
+    color: rgb(207, 205, 205);
+}
+
+.app-modalDialog>.window>.footer .positiveBtn {
+    color: #1EBF8A;
+}
+
+.app-modalDialog>.window>.footer .positiveBtn:hover {
+    color: rgb(65, 236, 179);
+}
+
+.app-modalDialog>.window>.footer button.left-btn {
+    border-left: 1px solid #707070;
+}
+
+.app-modalDialog >.window>.footer .deleteBtn {
+    color: #D13A43;
+}
+
+.app-modalDialog >.window>.footer .deleteBtn:hover {
+    color: rgb(230, 10, 10);
+}
+
+.app-modalDialog>.window>.footer button.left-btn {
+    border-left: 1px solid #707070;
+}
+
+.app-modalDialog .title .title-name {
+    flex: 1;
+}
+
+.app-modalDialog .title .closeIcon {
+    font-size: 25px;
+}
+
+.app-modalDialog .row {
+    padding-top: 20px;
+}
+
+.app-modalDialog .row .label {
+    color: #D1D2D5;
+    font-size: 11px;
+    text-align: left;
+}
+
+.app-modalDialog .row .input-div {
+    padding-top: 10px;
+    display: flex;
+}
+
+.app-modalDialog .row .input-div .input-ele,
+.app-modalDialog .row .input-div .select-ele {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgb(71, 71, 71);
+}
+
+.app-modalDialog .row .input-div .addOnIcon {
+    border: 1px solid rgb(71, 71, 71);
+    border-right: none;
+}
+
+.app-modalDialog .row .details {
+    display: flex;
+    align-items: center;
+}
+
+.app-modalDialog .row .details .detailsLabel {
+    flex: 4;
+}
+
+.app-modalDialog .row .details .collen {
+    flex: 2;
+}
+
+.app-modalDialog .row .details .data {
+    flex: 4;
+    color: azure;
+}
+
+/* ==============  Home page popup dialog css ends here ============ */
+
+.addAppliance-dialog .window {
+    width: 40%;
+    min-width: 450px;
+    max-width: 450px;
+}
+
+.deleteAppliance-dialog .window {
+    width: 40%;
+    min-width: 550px;
+    max-width: 550px;
+}
