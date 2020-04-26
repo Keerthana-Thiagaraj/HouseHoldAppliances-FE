@@ -44,6 +44,10 @@ button {
     justify-content: center;
 }
 
+.text-center {
+    text-align: center !important;
+}
+
 .positiveBtn {
     color: #FFFFFF;
     background-color: #1EBF8A;
@@ -51,7 +55,36 @@ button {
     border-radius: 3px;
 }
 
-
 .positiveBtn:hover {
     background-color: rgb(13, 173, 120);
+}
+
+/* =====    input errors css ===== */
+
+.errorInput input,
+.errorInput .addOnIcon {
+    border: 1px solid #FF7070 !important;
+}
+
+.errorDiv .error,
+.commonErrorDiv .error {
+    color: #FF7070 !important;
+    font-size: 10px;
+}
+
+.errorInput.hasAddOn input {
+    border-left: none !important;
+}
+
+.errorInput.hasAddOn .addOnIcon {
+    border-right: none !important;
+}
+
+.content .errorDiv {
+    height: 15px;
+    padding-top: 5px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

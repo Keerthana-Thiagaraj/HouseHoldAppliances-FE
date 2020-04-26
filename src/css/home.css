@@ -25,6 +25,22 @@
     width: 100%;
 }
 
+.homePage .searchDiv .searchSelect {
+    height: 40px;
+    background-color: #2A2B43;
+    border: 1px solid rgb(48, 49, 77);
+    outline: none;
+    color: azure;
+}
+
+.homePage .searchDiv .clearSearch {
+    margin-left: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    color: gray;
+    width: 80px;
+}
+
 .homePage .searchDiv .searchInput {
     height: 35px;
     width: 100%;
@@ -35,7 +51,7 @@
     padding-left: 10px;
     /* margin: 5px; */
 }
- 
+
 .homePage .searchDiv .inputAddOn {
     position: relative;
     width: 40%;

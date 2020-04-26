@@ -2,11 +2,12 @@
 // returns a POST promise 
 // async/await is not used, as it is not supported in all browsers (including IE all versions)
 
-export const httpPost = function (url, data) {
-
-    return fetch(url, {
-        method: 'POST',
-        credentials: 'include',
+export const httpPost = function (url, method, data) {
+    // const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    // let wholeUrl = proxyurl + url
+    return fetch((url), {
+        method: method,
+        credentials: 'omit',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -15,12 +16,53 @@ export const httpPost = function (url, data) {
         .then(checkStatus)
         .then(getBody)
         .then(parseBody)
-        .then(parseJson)
         .catch(function (error) {
             throw error
         })
 }
 
+export const httpPut = function (url, method, data) {
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    let wholeUrl = proxyurl + url
+    return fetch((proxyurl + url), {
+        method: method,
+        credentials: 'omit',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE, PUT"
+        },
+        body: data ? data : JSON.stringify({})
+    })
+        .then(checkStatus)
+        .then(getBody)
+        .then(parseBody)
+        .catch(function (error) {
+            throw error
+        })
+}
+
+export const httpGet = function (url) {
+    return fetch(url)
+        .then(checkStatus)
+        .then(getBody)
+        .then(parseBody)
+        .catch(function (error) {
+            throw error
+        })
+}
+
+export const httpDelete = function (url, method) {
+    return fetch(url, {
+        method: method
+    })
+        .then(checkStatus)
+        .then(getBody)
+        .then(parseBody)
+        .catch(function (error) {
+            throw error
+        })
+}
 
 // checks for Http Status 
 function checkStatus(response) {
@@ -40,36 +82,55 @@ function parseBody(response) {
     return JSON.parse(response);
 }
 
-function parseJson(response) {
-
-    response = response.response;
-
-    if (response.infoID !== "0") {
-        var msg = response.infoMsg;
-        var error = new Error(msg);
-        error.infoID = response.infoID;
-        error.data = response.data;
-        throw error;
-    }
-
-    return response;
-}
-
-
 // ==========================================================================
 // Common request for all features
 
-export const placeRequest = function (url, request, successCallback, errorCallback) {
-    let req = request.toS();
-    return httpPost(url, req)
-        .then(function (respobj) {
-            if (successCallback)
-                successCallback(respobj);
-        })
-        .catch(function (error) {
-            if (errorCallback)
-                errorCallback(error);
-        });
+export const placeRequest = function (url, method, request, successCallback, errorCallback) {
+    let req = ''
+    if (method === "POST") {
+        req = JSON.stringify(request);
+        return httpPost(url, method, req)
+            .then(function (respobj) {
+                if (successCallback)
+                    successCallback(respobj);
+            })
+            .catch(function (error) {
+                if (errorCallback)
+                    errorCallback(error);
+            });
+    } else if (method === "PUT") {
+        req = JSON.stringify(request);
+        return httpPut(url, method, req)
+            .then(function (respobj) {
+                if (successCallback)
+                    successCallback(respobj);
+            })
+            .catch(function (error) {
+                if (errorCallback)
+                    errorCallback(error);
+            });
+    } else if (method === "GET") {
+        return httpGet(url)
+            .then(function (respobj) {
+                if (successCallback)
+                    successCallback(respobj);
+            })
+            .catch(function (error) {
+                if (errorCallback)
+                    errorCallback(error);
+            });
+    }
+    else if (method === "DELETE") {
+        return httpDelete(url, method)
+            .then(function (respobj) {
+                if (successCallback)
+                    successCallback(respobj);
+            })
+            .catch(function (error) {
+                if (errorCallback)
+                    errorCallback(error);
+            });
+    }
 }
 
 // ==========================================================================

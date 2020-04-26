@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 
 class AddAppliances extends Component {
@@ -7,32 +6,85 @@ class AddAppliances extends Component {
         super(props)
 
         this.state = {
-            serialNumber: '',
+            serialnumber: '',
             brand: '',
             model: '',
             status: '',
-            dateBought: ''
+            date: '',
+            inputError: {}
         }
     }
 
     componentWillReceiveProps(props) {
+
         if (props.details) {
             this.setState({
-                serialNumber: props.details.serialNumber,
+                serialnumber: props.details.serialnumber,
                 brand: props.details.brand,
                 model: props.details.model,
                 status: props.details.status,
-                dateBought: props.details.dateBought
+                date: props.details.date
             })
         } else {
             this.setState({
-                serialNumber: '',
+                serialnumber: '',
                 brand: '',
                 model: '',
                 status: '',
-                dateBought: ''
+                date: ''
             })
         }
+    }
+
+    onChangeValue = (e) => {
+        let name = e.target.name
+        let val = e.target.value
+
+        this.setState({ [name]: val })
+    }
+
+    onChangeStatus = (e) => {
+        this.setState({ status: e.target.value })
+    }
+
+    onClickSave = () => {
+        let error = {}
+        let placeReq = true
+
+        // if (this.state.serialnumber === "") {
+        //     placeReq = false
+        //     error.serialnumber = "Serial number cannot be empty"
+        // }
+        if (this.state.brand === "") {
+            placeReq = false
+            error.brand = "Brand cannot be empty"
+        }
+        if (this.state.model === "") {
+            placeReq = false
+            error.model = "Model cannot be empty"
+        }
+        // if (this.state.date === "") {
+        //     placeReq = false
+        //     error.date = "Date cannot be empty"
+        // }
+
+        this.setState({ inputError: error })
+        if (placeReq) {
+            let data = {
+                serialnumber: this.state.serialnumber,
+                brand: this.state.brand,
+                model: this.state.model,
+                status: this.state.status,
+                date: this.state.date
+            }
+            this.props.onClickSaveCB && this.props.onClickSaveCB(data)
+            this.onClose()
+        }
+    }
+
+    onClose = () => {
+        this.setState({ inputError: {} })
+        this.props.onCloseCB()
     }
 
     render() {
@@ -48,44 +100,56 @@ class AddAppliances extends Component {
                         <div className="content">
                             <div className="row">
                                 <div className="label">Serial No :</div>
-                                <div className={`input-div hasAddOn`} >
+                                <div className={`input-div hasAddOn ${this.state.inputError.serialnumber ? 'errorInput' : ''}`}>
                                     <div className="addOnIcon">
                                         <i className="fa fa-bars" aria-hidden="true"></i>
                                     </div>
                                     <input type="text" className="input-ele inputVal"
-                                        value={this.state.serialNumber}
+                                        value={this.state.serialnumber}
+                                        name="serialnumber"
+                                        onChange={this.onChangeValue}
                                     />
                                 </div>
                                 <div className="errorDiv">
-                                    <span className="error"></span>
+                                    <span className="error">
+                                        {this.state.inputError.serialnumber}
+                                    </span>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="label">Brand :</div>
-                                <div className={`input-div hasAddOn`} >
+                                <div className={`input-div hasAddOn ${this.state.inputError.brand ? 'errorInput' : ''}`}>
                                     <div className="addOnIcon">
                                         <i className="fa fa-bars" aria-hidden="true"></i>
                                     </div>
                                     <input type="text" className="input-ele inputVal"
                                         value={this.state.brand}
+                                        name="brand"
+                                        onChange={this.onChangeValue}
                                     />
                                 </div>
                                 <div className="errorDiv">
-                                    <span className="error"></span>
+                                    <span className="error">
+                                        {this.state.inputError.brand}
+                                    </span>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="label">Model :</div>
-                                <div className={`input-div hasAddOn`} >
+                                <div className={`input-div hasAddOn ${this.state.inputError.model ? 'errorInput' : ''}`}>
                                     <div className="addOnIcon">
                                         <i className="fa fa-bars" aria-hidden="true"></i>
                                     </div>
                                     <input type="text" className="input-ele inputVal"
                                         value={this.state.model}
+                                        name="model"
+                                        onChange={this.onChangeValue}
                                     />
                                 </div>
                                 <div className="errorDiv">
-                                    <span className="error"></span>
+                                    <span className="error">
+                                        {this.state.inputError.model}
+                                    </span>
                                 </div>
                             </div>
                             <div className="row">
@@ -94,7 +158,10 @@ class AddAppliances extends Component {
                                     <div className="addOnIcon">
                                         <i className="fa fa-bars" aria-hidden="true"></i>
                                     </div>
-                                    <select className="select-ele" value={this.state.status}>
+                                    <select className="select-ele"
+                                        value={this.state.status}
+                                        onChange={this.onChangeStatus}
+                                    >
                                         <option value="active">Active</option>
                                         <option value="inactive">In Active</option>
                                     </select>
@@ -103,24 +170,29 @@ class AddAppliances extends Component {
                                     <span className="error"></span>
                                 </div>
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="label">Date Bought :</div>
-                                <div className={`input-div hasAddOn`} >
+                                <div className={`input-div hasAddOn ${this.state.inputError.date ? 'errorInput' : ''}`} >
                                     <div className="addOnIcon">
                                         <i className="fa fa-calendar" aria-hidden="true"></i>
                                     </div>
                                     <input type="text" className="input-ele inputVal"
-                                        value={this.state.dateBought}
+                                        value={this.state.date}
+                                        name="date"
+                                        onChange={this.onChangeValue}
                                     />
                                 </div>
                                 <div className="errorDiv">
-                                    <span className="error"></span>
+                                    <span className="error">
+                                        {this.state.inputError.date}
+                                    </span>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="footer">
-                            <button className="negativeBtn" onClick={this.props.onCloseCB}>CANCEL</button>
+                            <button className="negativeBtn" onClick={this.onClose}>CANCEL</button>
                             <button className="left-btn positiveBtn"
+                                onClick={this.onClickSave}
                             >
                                 {this.props.edit ? "UPDATE" : "SAVE"}
                             </button>

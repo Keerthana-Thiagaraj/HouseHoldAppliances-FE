@@ -5,6 +5,8 @@ import Add_EditAppliances from './Add_EditApplianceDialog';
 import DeleteAppliance from './DeleteApplianceDialog';
 
 import { placeRequest } from '../model/ApiCommunicator'
+import { ApiURLs } from '../model/ServiceURLs'
+import AppDialog from './AppDialog';
 
 class HomeComponent extends Component {
 
@@ -12,52 +14,41 @@ class HomeComponent extends Component {
         super(props);
 
         this.state = {
-            appliancesList: [
-                {
-                    "serialNumber": "1",
-                    "brand": "samsung",
-                    "model": "S10",
-                    "status": "active",
-                    "dateBought": "12-APR-2020"
-                },
-                {
-                    "serialNumber": "2",
-                    "brand": "LG",
-                    "model": "L100",
-                    "status": "active",
-                    "dateBought": "12-MAY-2020"
-                },
-                {
-                    "serialNumber": "3",
-                    "brand": "samsung",
-                    "model": "S20",
-                    "status": "active",
-                    "dateBought": "22-APR-2020"
-                },
-                {
-                    "serialNumber": "4",
-                    "brand": "SONY",
-                    "model": "SS30",
-                    "status": "active",
-                    "dateBought": "18-APR-2020"
-                },
-                {
-
-                    "serialNumber": "5",
-                    "brand": "HITACHI",
-                    "model": "H39",
-                    "status": "inactive",
-                    "dateBought": "08-JAN-2020"
-
-                }
-            ],
+            appliancesList: [],
             errorMsg: '',
             showAddDialog: false,
             editDetails: null,
             editAppliance: false,
             showDeleteDialog: false,
-            showLoader: false
+            showLoader: false,
+            searchValue: '',
+            selectedSearchSelect: 'serialnumber',
+            showAppDialog: false,
+            appDialogErrorMsg: ''
         }
+    }
+
+    componentDidMount() {
+        this.getApplianceList()
+    }
+
+    getApplianceList = () => {
+        this.setState({ showLoader: true })
+        placeRequest(
+            ApiURLs.GET_APPLIANCE.url,
+            ApiURLs.GET_APPLIANCE.method,
+            {},
+            this.getListSuccessCB,
+            this.getListErrorCB
+        )
+    }
+
+    getListSuccessCB = (resp) => {
+        this.setState({ appliancesList: resp, errorMsg: '', showLoader: false })
+    }
+
+    getListErrorCB = (error) => {
+        this.setState({ errorMsg: error.message, appliancesList: [], showLoader: false })
     }
 
     onClickAdd = () => {
@@ -73,7 +64,118 @@ class HomeComponent extends Component {
     }
 
     onCloseDialogs = () => {
-        this.setState({ showAddDialog: false, showDeleteDialog: false })
+        this.setState({ showAddDialog: false, showDeleteDialog: false, showAppDialog: false })
+    }
+
+    onChangeSearchSelect = (e) => {
+        let val = e.target.value
+        this.setState({ selectedSearchSelect: val }, () => {
+            if (this.state.searchValue.length)
+                this.searchList(this.state.searchValue)
+        })
+    }
+
+    onSearch = (e) => {
+        let val = e.target.value
+        this.setState({ searchValue: val })
+        if (val.length) {
+            this.searchList(val)
+        } else {
+            this.getApplianceList()
+        }
+    }
+
+    searchList = (val) => {
+        let urlObj = ApiURLs.SERACH_APPLIANCE
+        let updatedUrl = urlObj.url + "?search=(" + this.state.selectedSearchSelect + ":" + val + ")"
+        this.setState({ appliancesList: [], errorMsg: '' })
+        placeRequest(
+            updatedUrl,
+            urlObj.method,
+            {},
+            this.searchListSuccessCB,
+            this.searchListErrorCB
+        )
+    }
+
+    searchListSuccessCB = (resp) => {
+        if (resp.length)
+            this.setState({ appliancesList: resp, errorMsg: '' })
+        else
+            this.setState({ appliancesList: [], errorMsg: 'No data found' })
+    }
+
+    searchListErrorCB = (error) => {
+        if (error.message)
+            this.setState({ appliancesList: [], errorMsg: error.message })
+        else
+            this.setState({ appliancesList: [], errorMsg: error })
+    }
+
+    clearSearch = () => {
+        this.setState({ searchValue: '' })
+        this.getApplianceList()
+    }
+
+    onDeleteAppliance = (serial) => {
+        this.setState({ showLoader: true })
+        let urlObj = ApiURLs.DELETE_APPLIANCE
+        let updatedUrl = urlObj.url + "/" + serial
+        placeRequest(
+            updatedUrl,
+            urlObj.method,
+            {},
+            this.deleteSuccessCB,
+            this.deleteErrorCB
+        )
+    }
+
+    deleteSuccessCB = (resp) => {
+        this.setState({
+            showLoader: false,
+            showAppDialog: true,
+            appDialogErrorMsg: "Successfully deleted"
+        })
+        this.getApplianceList()
+    }
+
+    deleteErrorCB = (error) => {
+        this.setState({
+            showLoader: false,
+            appDialogErrorMsg: error.message ? error.message : error,
+            showAppDialog: true
+        })
+    }
+
+    onClickSave = (data) => {
+        console.log(this.state.editAppliance)
+        console.log(data)
+        this.setState({ showLoader: true })
+        let urlObj = ''
+        if (this.state.editAppliance)
+            urlObj = ApiURLs.UPDATE_APPLIANCE
+        else
+            urlObj = ApiURLs.ADD_APPLIANCE
+        placeRequest(
+            urlObj.url,
+            urlObj.method,
+            data,
+            this.addApplianceSuccessCB,
+            this.addApplianceErrorCB
+        )
+    }
+
+    addApplianceSuccessCB = (resp) => {
+        this.setState({ showLoader: false })
+        this.getApplianceList()
+    }
+
+    addApplianceErrorCB = (error) => {
+        this.setState({
+            showLoader: false,
+            appDialogErrorMsg: error.message ? error.message : error,
+            showAppDialog: true
+        })
     }
 
     render() {
@@ -84,11 +186,26 @@ class HomeComponent extends Component {
                 </div>
                 <div className="body">
                     <div className="searchDiv">
+                        <select className="searchSelect" onChange={(e) => this.onChangeSearchSelect(e)}>
+                            <option value="serialnumber">Serial Number</option>
+                            <option value="brand">Brand</option>
+                            <option value="model">Model</option>
+                            <option value="status">Status</option>
+                        </select>
                         <div className="inputAddOn">
                             <input type="text" className="searchInput"
-                                placeholder="Search your Brand, Model, etc."
+                                value={this.state.searchValue}
+                                onChange={(e) => this.onSearch(e)}
+                                placeholder="Search your appliances"
                             />
                             <i className="search-icon fa fa-search" aria-hidden="true"></i>
+                        </div>
+                        <div className="clearSearch">
+                            {
+                                this.state.searchValue.length ?
+                                    <span onClick={this.clearSearch}><u>clear search</u></span>
+                                    : null
+                            }
                         </div>
                     </div>
                     <div className="tableDiv">
@@ -116,11 +233,11 @@ class HomeComponent extends Component {
                                         this.state.appliancesList.map((item, index) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td>{item.serialNumber}</td>
+                                                    <td>{item.serialnumber}</td>
                                                     <td>{item.brand}</td>
                                                     <td>{item.model}</td>
                                                     <td>{item.status}</td>
-                                                    <td>{item.dateBought}</td>
+                                                    <td>{item.date}</td>
                                                     <td className="actions">
                                                         <span className="edit"
                                                             onClick={() => this.onClickEdit(item)}
@@ -138,9 +255,14 @@ class HomeComponent extends Component {
                                             )
                                         })
                                         :
-                                        <tr>
-                                            <td>{this.state.errorMsg}</td>
-                                        </tr>
+                                        this.state.errorMsg.length ?
+                                            <tr>
+                                                <td className="text-center">{this.state.errorMsg}</td>
+                                            </tr>
+                                            :
+                                            <tr>
+                                                <td className="text-center">Loading ...</td>
+                                            </tr>
                                 }
                             </tbody>
                         </table>
@@ -151,15 +273,22 @@ class HomeComponent extends Component {
                     onCloseCB={this.onCloseDialogs}
                     edit={this.state.editAppliance}
                     details={this.state.editDetails}
+                    onClickSaveCB={this.onClickSave}
                 />
 
                 <DeleteAppliance show={this.state.showDeleteDialog}
                     onCloseCB={this.onCloseDialogs}
                     details={this.state.deleteDetails}
+                    onDeleteCB={this.onDeleteAppliance}
                 />
 
                 <Loader show={this.state.showLoader} />
-                
+
+                <AppDialog show={this.state.showAppDialog}
+                    message={this.state.appDialogErrorMsg}
+                    onCloseCB={this.onCloseDialogs}
+                />
+
             </div>
         )
     }

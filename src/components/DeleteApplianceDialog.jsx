@@ -6,7 +6,7 @@ class DeleteApplianceDialog extends Component {
         super(props)
 
         this.state = {
-            serialNumber: '',
+            serialnumber: '',
             brand: '',
             model: '',
         }
@@ -15,11 +15,16 @@ class DeleteApplianceDialog extends Component {
     componentWillReceiveProps(props) {
         if (props.details) {
             this.setState({
-                serialNumber: props.details.serialNumber,
+                serialnumber: props.details.serialnumber,
                 brand: props.details.brand,
                 model: props.details.model
             })
         }
+    }
+
+    onClickDelete = () => {
+        this.props.onDeleteCB && this.props.onDeleteCB(this.state.serialnumber)
+        this.props.onCloseCB()
     }
 
     render() {
@@ -40,7 +45,7 @@ class DeleteApplianceDialog extends Component {
                                 <div className="details">
                                     <span className="detailsLabel">Serial No</span>
                                     <span className="collen">:</span>
-                                    <span className="data">{this.state.serialNumber}</span>
+                                    <span className="data">{this.state.serialnumber}</span>
                                 </div>
                                 <div className="details">
                                     <span className="detailsLabel">Brand</span>
@@ -57,6 +62,7 @@ class DeleteApplianceDialog extends Component {
                         <div className="footer">
                             <button className="negativeBtn" onClick={this.props.onCloseCB}>CANCEL</button>
                             <button className="left-btn deleteBtn"
+                                onClick={this.onClickDelete}
                             >
                                 DELETE
                             </button>
